@@ -72,9 +72,10 @@ func (f *RunwayFSM) Dispatch(ctx context.Context, event PlantEvent) (model.Plant
 	}
 	next, ok := NextState(f.state, event)
 	if !ok {
-		if f.hooks != nil {
-			_ = f.hooks.RunAfter(ctx, f.state, f.state, event)
-		}
+		// Illegal transitions are rejected before any acceptance side effects.
+		// After-hooks (e.g. the zonelock drive pulse) count accepted transitions
+		// only, so they must not fire here — otherwise an idle/standby state can
+		// emit a spurious opening pulse while the state flag stays unchanged.
 		return f.state, fmt.Errorf("%s from %s: %w", event, f.state, ErrIllegalTransition)
 	}
 	if event == EvIgnite && !f.loopPermissive {
