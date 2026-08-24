@@ -171,7 +171,7 @@ func (a *App) OnMeltLoss(ctx context.Context, holder string) error {
 	_ = holder
 	snap := a.Snapshot()
 	if err := interlock.CheckMeltLoss(snap.Heatbank); err != nil {
-		return fmt.Errorf("interlock denied")
+		return fmt.Errorf("interlock denied: %w", err)
 	}
 	return nil
 }
