@@ -15,6 +15,6 @@ func CloneGlycolSnapshot(s model.PlantSnapshot) GlycolSnapshotView {
 		Glycol:     s.Glycol,
 		Revision: s.Revision,
 	}
-	out.Alarms = s.Alarms[:len(s.Alarms):len(s.Alarms)]
+	out.Alarms = append([]model.AlarmEvent(nil), s.Alarms...)
 	return out
 }
