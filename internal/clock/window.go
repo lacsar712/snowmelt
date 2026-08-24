@@ -39,7 +39,7 @@ func NewPreheatWindow(clk ProcessClock) *PreheatWindow {
 }
 
 func (p *PreheatWindow) Ready(startedAt time.Time) bool {
-	return time.Since(startedAt) >= model.PreheatWindow
+	return p.window.Satisfied(p.clk, startedAt)
 }
 
 func (p *PreheatWindow) Require(startedAt time.Time) error {
