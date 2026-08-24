@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snowmelt HMI</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Snowmelt Plant HMI</h1>
+    <div id="unit-label">Unit: —</div>
+  </header>
+  <main>
+    <section class="panel status-panel">
+      <h2>Plant Status</h2>
+      <div class="grid">
+        <div class="metric"><span class="label">State</span><span id="state" class="value">—</span></div>
+        <div class="metric"><span class="label">Steam PSI</span><span id="pressure" class="value">—</span></div>
+        <div class="metric"><span class="label">Output MW</span><span id="mw" class="value">—</span></div>
+        <div class="metric"><span class="label">Glycol Level %</span><span id="glycol-level" class="value">—</span></div>
+        <div class="metric"><span class="label">Burner Phase</span><span id="burner" class="value">—</span></div>
+        <div class="metric"><span class="label">Excess O2 %</span><span id="o2" class="value">—</span></div>
+      </div>
+    </section>
+    <section class="panel controls-panel">
+      <h2>Operator Controls</h2>
+      <div class="buttons">
+        <button id="btn-preheat">Start Preheat</button>
+        <button id="btn-preheat-done">Complete Preheat</button>
+        <button id="btn-ignite">Ignite</button>
+        <button id="btn-reset">Reset Trip</button>
+      </div>
+      <div id="message" class="message"></div>
+    </section>
+    <section class="panel health-panel">
+      <h2>Health & Warmup</h2>
+      <pre id="health">Loading…</pre>
+    </section>
+    <section class="panel trend-panel">
+      <h2>Trend</h2>
+      <canvas id="trend" width="640" height="180"></canvas>
+    </section>
+  </main>
+  <footer>Snowmelt coordination HMI — embedded operator interface</footer>
+  <script src="/app.js"></script>
+</body>
+</html>
