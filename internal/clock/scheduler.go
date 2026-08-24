@@ -2,6 +2,7 @@ package clock
 
 import (
 	"context"
+	"strings"
 	"sync"
 	"time"
 
@@ -51,6 +52,8 @@ func (s *Scheduler) runLoop(ctx context.Context, id string, interval time.Durati
 	}
 }
 
+// Cancel tears down a single running task. It does not touch plan items,
+// because plan items are keyed by plan id, not by task id.
 func (s *Scheduler) Cancel(id string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -60,12 +63,32 @@ func (s *Scheduler) Cancel(id string) {
 	}
 }
 
+// CancelBurnPlan withdraws every heat-sequence step belonging to planID from the
+// backend queue. A withdraw must clear the queue so the planner no longer sees
+// the post-preheat heat segments; otherwise the stale steps linger and get
+// re-appended on the next install.
+func (s *Scheduler) CancelBurnPlan(planID string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	prefix := planID + ":"
+	for key := range s.planItems {
+		if strings.HasPrefix(key, prefix) {
+			delete(s.planItems, key)
+		}
+	}
+}
+
 func (s *Scheduler) CancelAll() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for id, cancel := range s.tasks {
 		cancel()
 		delete(s.tasks, id)
+	}
+	// A full teardown must also drain the backend heat-sequence queue; leaving
+	// planItems behind means a withdraw only changes the screen, not the queue.
+	for key := range s.planItems {
+		delete(s.planItems, key)
 	}
 }
 
