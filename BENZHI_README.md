@@ -1,6 +1,6 @@
-# HookRelay
+# snowmelt
 
-Signed ingress + reliable outbound webhook delivery (retry, circuit breaker, rate limit, DLQ, replay).
+snowmelt 是一套机场跑道融雪乙二醇回路工业过程控制系统，用于融雪循环监测与操作员 HMI。
 
 ## Requirements
 
